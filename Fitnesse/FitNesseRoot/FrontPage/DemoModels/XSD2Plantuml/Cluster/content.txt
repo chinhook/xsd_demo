@@ -1,0 +1,113 @@
+
+!*> Interface Requirement Specification
+
+!1 Interface Requirement Specification
+!*> Primitive types
+!2 Primitive type encoding definitions
+!|Basic type | XSD base type |Size in bits| Min | Max|Endianness |
+|Unsigned Byte |xs:unsignedByte | 8 bits |0 |255 |n/a |
+|Unsigned Short |xs:unsignedShort| 16 bits |0 |65535 |Big Endian |
+|Unsigned Integer|xs:unsignedByte | 8 bits |0 |4294967295|Big Endian |
+|IEEE 754 Floating point simple precision|xs:float|32 bits|||Big Endian |
+*!
+!*> Models
+!startuml
+class Demo{
++ hello : string
++ world : char *
+}
+!enduml
+!*> Complex type definitions
+!startuml
+Abstract tns.DataCluster{
++ identifier : xs.unsignedInt
++ size : xs.short
++ body : tns.ClusterBody
+}
+tns.DataCluster .down.> xs.unsignedInt
+tns.DataCluster .down.> xs.short
+tns.DataCluster .down.> tns.ClusterBody
+		
+			
+			
+			
+			
+			
+			
+		
+	Abstract tns.ClusterBody{
+}
+		
+			
+			
+		
+	Class tns.AltitudeCluster{
++ identifier : xs.unsignedInt
++ size : xs.short
++ body : tns.FloatValue
+}
+tns.AltitudeCluster .down.> xs.unsignedInt
+tns.AltitudeCluster .down.> xs.short
+tns.AltitudeCluster .down.> tns.FloatValue
+		
+			
+tns.AltitudeCluster -up-|> tns.DataCluster
+		
+	Class tns.FloatValue{
++ value : xs.float
+}
+tns.FloatValue .down.> xs.float
+		
+			
+tns.FloatValue -up-|> tns.ClusterBody
+		
+	Class tns.LatLong{
++ latitude : xs.float
++ longitude : xs.float
+}
+tns.LatLong .down.> xs.float
+tns.LatLong .down.> xs.float
+		
+			
+tns.LatLong -up-|> tns.ClusterBody
+		
+
+	Class tns.PositionCluster{
++ identifier : xs.unsignedInt
++ size : xs.short
++ body : tns.LatLong
+}
+tns.PositionCluster .down.> xs.unsignedInt
+tns.PositionCluster .down.> xs.short
+tns.PositionCluster .down.> tns.LatLong
+		
+			
+tns.PositionCluster -up-|> tns.DataCluster
+
+		
+	Class tns.FixPoint{
++ identifier : xs.unsignedInt
++ size : xs.short
++ fixMarker : tns.listOfCharacters
++ ident : tns.listOfCharacters
++ position : tns.PositionCluster
+}
+tns.FixPoint .down.> xs.unsignedInt
+tns.FixPoint .down.> xs.short
+tns.FixPoint .down.> tns.listOfCharacters
+tns.FixPoint .down.> tns.listOfCharacters
+tns.FixPoint .down.> tns.PositionCluster
+		
+			
+tns.FixPoint -up-|> tns.DataCluster
+		
+	
+!enduml
+*!
+*!
+*!
+!*> Code sippets
+!listing cpp {
+cout << "hello world !";
+}
+*!

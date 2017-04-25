@@ -1,0 +1,210 @@
+
+!*> Interface Requirement Specification
+
+!1 Interface Requirement Specification
+!*> Primitive types
+!2 Primitive type encoding definitions
+!|Basic type | XSD base type |Size in bits| Min | Max|Endianness |
+|Unsigned Byte |xs:unsignedByte | 8 bits |0 |255 |n/a |
+|Unsigned Short |xs:unsignedShort| 16 bits |0 |65535 |Big Endian |
+|Unsigned Integer|xs:unsignedByte | 8 bits |0 |4294967295|Big Endian |
+|IEEE 754 Floating point simple precision|xs:float|32 bits|||Big Endian |
+*!
+!*> Models
+!startuml
+class Demo{
++ hello : string
++ world : char *
+}
+!enduml
+!*> Complex type definitions
+!startuml
+Class tns.FixPosition{
++ fixMarker : .
++ latitude : xs.float
++ longitude : xs.float
+}
+tns.FixPosition .down.> .
+tns.FixPosition .down.> xs.float
+tns.FixPosition .down.> xs.float
+		
+			
+				
+					
+tns.FixPosition -up-|> xs.string
+				
+			
+			
+
+			
+
+		
+	Abstract tns.ValidatedFloatBase{
++ validity : xs.boolean
+}
+tns.ValidatedFloatBase .down.> xs.boolean
+		
+			
+		
+	Class tns.InvalidFloat{
++ validity : xs.boolean
+}
+tns.InvalidFloat .down.> xs.boolean
+		
+			
+tns.InvalidFloat -up-|> tns.ValidatedFloatBase
+		
+	Abstract tns.ValidFloatBase{
++ validity : xs.boolean
+}
+tns.ValidFloatBase .down.> xs.boolean
+		
+			
+tns.ValidFloatBase -up-|> tns.ValidatedFloatBase
+		
+	Class tns.ValidFloat{
++ value : xs.float
+}
+tns.ValidFloat .down.> xs.float
+		
+			
+tns.ValidFloat -up-|> tns.ValidFloatBase
+		
+	Class tns.LatLon{
++ latitude : tns.Latitude
++ longitude : tns.Longitude
+}
+tns.LatLon .down.> tns.Latitude
+tns.LatLon .down.> tns.Longitude
+		
+			
+			
+			
+			
+		
+	Class tns.t_Valid_ETA{
++ Estimated_Time_Of_Arrival_Val : .
++ Estimated_Time_Arrival : tns.Time
+}
+tns.t_Valid_ETA .down.> .
+tns.t_Valid_ETA .down.> tns.Time
+		
+			
+				
+					
+tns.t_Valid_ETA -up-|> tns.Validity
+				
+			
+			
+			
+		
+	Class tns.t_Invalid_ETA{
++ Estimated_Time_Of_Arrival_Val : .
+}
+tns.t_Invalid_ETA .down.> .
+		
+			
+				
+					
+tns.t_Invalid_ETA -up-|> tns.Validity
+				
+			
+		
+	Class tns.t_Valid_EFOB{
++ Estimate_Fuel_On_Board_Val : .
++ Estimated_Fuel_On_Board : tns.Weight
+}
+tns.t_Valid_EFOB .down.> .
+tns.t_Valid_EFOB .down.> tns.Weight
+		
+			
+				
+					
+tns.t_Valid_EFOB -up-|> tns.Validity
+				
+			
+			
+			
+		
+	Class tns.t_Invalid_EFOB{
++ Estimate_Fuel_On_Board_Val : .
+}
+tns.t_Invalid_EFOB .down.> .
+		
+			
+				
+					
+tns.t_Invalid_EFOB -up-|> tns.Validity
+				
+			
+		
+	Class tns.t_Valid_Predicted_Speed{
++ Predicted_Speed_Val : .
++ Predicted_Speed : tns.Speed
+}
+tns.t_Valid_Predicted_Speed .down.> .
+tns.t_Valid_Predicted_Speed .down.> tns.Speed
+		
+			
+				
+					
+tns.t_Valid_Predicted_Speed -up-|> tns.Validity
+				
+			
+			
+			
+		
+	Class tns.t_Invalid_Predicted_Speed{
++ Predicted_Speed_Val : .
+}
+tns.t_Invalid_Predicted_Speed .down.> .
+		
+			
+				
+					
+tns.t_Invalid_Predicted_Speed -up-|> tns.Validity
+				
+			
+		
+	Class tns.t_Valid_Predicted_Wind{
++ Predicted_Wind_Val : .
++ Predicted_Wind_Speed : tns.Speed
++ Predicted_Wind_Dir : tns.AngleBearing
+}
+tns.t_Valid_Predicted_Wind .down.> .
+tns.t_Valid_Predicted_Wind .down.> tns.Speed
+tns.t_Valid_Predicted_Wind .down.> tns.AngleBearing
+		
+			
+				
+					
+tns.t_Valid_Predicted_Wind -up-|> tns.Validity
+				
+			
+			
+			
+			
+			
+		
+	Class tns.t_Invalid_Predicted_Wind{
++ Predicted_Wind_Val : .
+}
+tns.t_Invalid_Predicted_Wind .down.> .
+		
+			
+				
+					
+tns.t_Invalid_Predicted_Wind -up-|> tns.Validity
+				
+			
+		
+	
+!enduml
+*!
+*!
+*!
+!*> Code sippets
+!listing cpp {
+cout << "hello world !";
+}
+*!

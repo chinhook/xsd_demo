@@ -1,0 +1,30 @@
+---
+Suite
+---
+!1 Title
+
+!1 Model
+!startuml
+fitnesse -> plantuml : generate
+!enduml
+
+!startuml
+class Demo{
++ hello : string
++ world : char *
+}
+!enduml
+
+!1 Code snippets
+!listing c{
+void main (int argc, char* argv []){
+	char * world = "world";
+    char * s = null;
+    if (argc = 1){
+       	s = argv[1];
+    else
+       	s = world;
+    printf("Hello %s", s);
+}
+
+!contents -R2 -g -p -f -h!contents -R2 -g -p -f -h
