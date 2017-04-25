@@ -1,6 +1,3 @@
-[submodule "schemas/afcdi"]
-	path = schemas/afcdi
-	url = file:///G:/fms200_product_interfaces_models
 [submodule "styles/xsd2plantuml"]
 	path = styles/xsd2plantuml
 	url = https://github.com/chinhook/xsd2plantuml.git
