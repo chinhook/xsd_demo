@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="../styles/simple.xsl"?>
+<xs:schema targetNamespace="http://www.thalesgroup.com/avionics/clusters"
+	elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:fm2xx="http://www.thalesgroup.com/avionics/irs2xxattributes"
+	xmlns:tns="http://www.thalesgroup.com/avionics/clusters">
+
+	<xs:complexType name="DataCluster" abstract="true">
+		<xs:sequence minOccurs="1" maxOccurs="1">
+			<xs:element name="identifier" type="xs:unsignedInt"
+				minOccurs="1" maxOccurs="1">
+			</xs:element>
+			<xs:element name="size" type="xs:short" minOccurs="1"
+				maxOccurs="1">
+			</xs:element>
+			<xs:element name="body" type="tns:ClusterBody" minOccurs="0"
+				maxOccurs="1">
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="ClusterBody" abstract="true">
+		<xs:sequence>
+			<xs:any processContents="lax" minOccurs="0" maxOccurs="unbounded">
+			</xs:any>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="AltitudeCluster">
+		<xs:complexContent>
+			<xs:restriction base="tns:DataCluster">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:element name="identifier" type="xs:unsignedInt"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="size" type="xs:short" minOccurs="1"
+						maxOccurs="1">
+					</xs:element>
+					<xs:element name="body" type="tns:FloatValue" minOccurs="1"
+						maxOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="FloatValue" abstract="false">
+		<xs:complexContent>
+			<xs:restriction base="tns:ClusterBody">
+				<xs:sequence>
+					<xs:element name="value" type="xs:float" minOccurs="1"
+						maxOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:complexType name="LatLong">
+		<xs:complexContent>
+			<xs:restriction base="tns:ClusterBody">
+				<xs:sequence>
+					<xs:element form="qualified" name="latitude" type="xs:float"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element form="qualified" name="longitude" type="xs:float"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+
+	</xs:complexType>
+
+	<xs:complexType name="PositionCluster">
+		<xs:complexContent>
+			<xs:restriction base="tns:DataCluster">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:element name="identifier" type="xs:unsignedInt"
+						minOccurs="1" maxOccurs="1" fixed="2587">
+					</xs:element>
+					<xs:element name="size" type="xs:short" minOccurs="1"
+						maxOccurs="1">
+					</xs:element>
+					<xs:element name="body" type="tns:LatLong" minOccurs="1"
+						maxOccurs="1">
+					</xs:element>
+				</xs:sequence>
+			</xs:restriction>
+
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:simpleType name="T_Fpln_Id">
+		<xs:restriction base="xs:unsignedByte">
+			<xs:enumeration value="0" fm2xx:literal="ACTIVE FPLN"></xs:enumeration>
+			<xs:enumeration value="1" fm2xx:literal="TEMPORARY FPLN"></xs:enumeration>
+			<xs:enumeration value="2" fm2xx:literal="SECONDARY FPLN 1"></xs:enumeration>
+			<xs:enumeration value="3" fm2xx:literal="SECONDARY FPLN 2"></xs:enumeration>
+			<xs:enumeration value="4" fm2xx:literal="SECONDARY FPLN 3"></xs:enumeration>
+			<xs:enumeration value="255" fm2xx:literal="RECOVERY FPLN"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="listOfCharacters">
+		<xs:list>
+			<xs:simpleType>
+				<xs:restriction base="xs:byte" />
+			</xs:simpleType>
+		</xs:list>
+	</xs:simpleType>
+
+	<xs:complexType name="FixPoint">
+		<xs:complexContent>
+			<xs:restriction base="tns:DataCluster">
+				<xs:sequence minOccurs="1" maxOccurs="1">
+					<xs:element name="identifier" type="xs:unsignedInt"
+						minOccurs="1" maxOccurs="1">
+					</xs:element>
+					<xs:element name="size" type="xs:short" minOccurs="1"
+						maxOccurs="1">
+					</xs:element>
+					<xs:element name="body" minOccurs="1" maxOccurs="1"
+						fm2xx:clusterBodyOf="FixPoint">
+						<xs:complexType>
+							<xs:complexContent>
+								<xs:restriction base="tns:ClusterBody">
+									<xs:sequence>
+										<xs:element name="fixMarker" type="tns:listOfCharacters"
+											minOccurs="1" maxOccurs="1">
+										</xs:element>
+										<xs:element name="ident" type="tns:listOfCharacters"
+											minOccurs="1" maxOccurs="1">
+										</xs:element>
+										<xs:element name="position" type="tns:PositionCluster"
+											minOccurs="1" maxOccurs="1">
+										</xs:element>
+									</xs:sequence>
+								</xs:restriction>
+							</xs:complexContent>
+						</xs:complexType>
+					</xs:element>
+				</xs:sequence>
+			</xs:restriction>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

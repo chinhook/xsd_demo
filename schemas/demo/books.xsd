@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://www.example.org/books"
+	elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:tns="http://www.example.org/books"
+	xmlns:bilio="http://www.example.org/biblio">
+	<xs:complexType name="Book" bilio:mediaType="BOOK">
+		<xs:sequence>
+			<xs:element name="Title" type="xs:string" />
+			<xs:element name="Author" type="xs:string" />
+			<xs:element name="Editor" type="xs:string" />
+			<xs:element name="ISBN" type="xs:string" />
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>
