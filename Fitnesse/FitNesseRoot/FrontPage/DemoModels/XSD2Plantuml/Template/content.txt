@@ -1,0 +1,46 @@
+
+!** Interface Requirement Specification
+!1 Interface Requirement Specification
+!*> Primitive types
+|'''Primitive type encoding definitions'''                                                                                               |
+|!style_meta[Basic type]|!style_meta[XSD base type] |!style_meta[Size in bits]|!style_meta[Min]| !style_meta[Max]|!style_meta[Endianness]|
+|Unsigned Byte |xs:unsignedByte | 8 bits |0 |255 |n/a |
+|Unsigned Short |xs:unsignedShort| 16 bits |0 |65535 |Big Endian |
+|Unsigned Integer|xs:unsignedByte | 8 bits |0 |4294967295|Big Endian |
+|IEEE 754 Floating point simple precision|xs:float|32 bits|||Big Endian |
+*!
+!** Models
+!startuml
+class Demo {
++ hello : string
++ world : char *
+}
+!enduml
+!*> Simple types overview
+!startuml
+!enduml
+*!
+*!
+!** Simple content details
+!**> Enumerations
+*!
+!**> Numerics
+*!
+!**> Strings
+*!
+*!
+!*> Complex types overview
+!startuml
+!enduml
+*!
+!*> Complex content details
+!startuml
+!enduml
+
+!*> Code sippets
+!listing cpp {
+cout << "hello world !";
+}
+*!
+*!
+*!

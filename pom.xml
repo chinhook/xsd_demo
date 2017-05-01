@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.thales.avionics</groupId>
+	<artifactId>xsd_demo</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>XSD Demo</name>
+	<scm>
+		<connection>scm:git:git://github.com/chinhook/xsd_demo.git</connection>
+		<url>https://github.com/chinhook/xsd_demo.git</url>
+		<developerConnection>scm:git:git://github.com/chinhook/xsd_demo.git</developerConnection>
+	</scm>
+	<!-- <modules>
+		<module>styles/xsd2plantuml</module>
+	</modules> -->
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<transformationSets>
+						<transformationSet>
+							<dir>schemas/afcdi/schemas/FMS</dir>
+							<includes>
+								<include>**/*.xsd</include>
+							</includes>
+							<stylesheet>styles/xsd2plantuml/plantuml.xsl</stylesheet>
+							<outputDir>target</outputDir>
+							<fileMappers>
+								<fileMapper
+									implementation="org.codehaus.plexus.components.io.filemappers.RegExpFileMapper">
+									<pattern>^(.*)\.xsd$</pattern>
+									<replacement>$1/content.txt</replacement>
+								</fileMapper>
+							</fileMappers>
+						</transformationSet>
+					</transformationSets>
+				</configuration>
+				<!-- make the translation working with xslt2.0 -->
+				<dependencies>
+					<dependency>
+						<groupId>net.sf.saxon</groupId>
+						<artifactId>saxon</artifactId>
+						<version>8.7</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+</project>

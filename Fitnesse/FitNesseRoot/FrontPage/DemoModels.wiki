@@ -1,5 +1,7 @@
 ---
 Suite
+SymbolicLinks
+  MavenTarget: file://../target
 ---
 !1 Title
 
