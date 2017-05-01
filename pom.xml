@@ -11,9 +11,9 @@
 		<url>https://github.com/chinhook/xsd_demo.git</url>
 		<developerConnection>scm:git:git://github.com/chinhook/xsd_demo.git</developerConnection>
 	</scm>
-	<modules>
+	<!-- <modules>
 		<module>styles/xsd2plantuml</module>
-	</modules>
+	</modules> -->
 	<build>
 		<plugins>
 			<plugin>
@@ -30,9 +30,9 @@
 				<configuration>
 					<transformationSets>
 						<transformationSet>
-							<dir>schemas/demo</dir>
+							<dir>schemas/afcdi/schemas/FMS</dir>
 							<includes>
-								<include>*.xsd</include>
+								<include>**/*.xsd</include>
 							</includes>
 							<stylesheet>styles/xsd2plantuml/plantuml.xsl</stylesheet>
 							<outputDir>target</outputDir>
