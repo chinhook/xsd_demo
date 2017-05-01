@@ -1,32 +1,79 @@
 
-!*> Interface Requirement Specification
-
+!** Interface Requirement Specification
 !1 Interface Requirement Specification
 !*> Primitive types
-!2 Primitive type encoding definitions
-!|Basic type | XSD base type |Size in bits| Min | Max|Endianness |
+|'''Primitive type encoding definitions'''                                                                                               |
+|!style_meta[Basic type]|!style_meta[XSD base type] |!style_meta[Size in bits]|!style_meta[Min]| !style_meta[Max]|!style_meta[Endianness]|
 |Unsigned Byte |xs:unsignedByte | 8 bits |0 |255 |n/a |
 |Unsigned Short |xs:unsignedShort| 16 bits |0 |65535 |Big Endian |
 |Unsigned Integer|xs:unsignedByte | 8 bits |0 |4294967295|Big Endian |
 |IEEE 754 Floating point simple precision|xs:float|32 bits|||Big Endian |
 *!
-!*> Models
+!** Models
 !startuml
-class Demo{
+class Demo {
 + hello : string
 + world : char *
 }
 !enduml
-!*> Complex type definitions
+!*> Simple types overview
+!startuml
+Enum T_Fpln_Id <<xs:unsignedByte>> {
++ACTIVE FPLN:0
++TEMPORARY FPLN:1
++SECONDARY FPLN 1:2
++SECONDARY FPLN 2:3
++SECONDARY FPLN 3:4
++RECOVERY FPLN:255
+}
+Class listOfCharacters <<>>
+!enduml
+*!
+*!
+!** Simple content details
+!**> Enumerations
+!*> T_Fpln_Id ( xs:unsignedByte )
+|'''T_Fpln_Id'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|ACTIVE FPLN|
+|1|TEMPORARY FPLN|
+|2|SECONDARY FPLN 1|
+|3|SECONDARY FPLN 2|
+|4|SECONDARY FPLN 3|
+|255|RECOVERY FPLN|
+*!
+
+*!
+!**> Numerics
+*!
+!**> Strings
+*!
+*!
+!*> Complex types overview
+!startuml
+Abstract tns.DataCluster
+Abstract tns.ClusterBody
+Class tns.AltitudeCluster
+Class tns.FloatValue
+Class tns.LatLong
+Class tns.PositionCluster
+Class tns.FixPoint
+!enduml
+*!
+!*> Complex content details
 !startuml
 Abstract tns.DataCluster{
-+ identifier : xs.unsignedInt
-+ size : xs.short
-+ body : tns.ClusterBody
++identifier:xs:unsignedInt
++size:xs:short
++body:tns:ClusterBody
 }
+
 tns.DataCluster .down.> xs.unsignedInt
+
 tns.DataCluster .down.> xs.short
+
 tns.DataCluster .down.> tns.ClusterBody
+
 		
 			
 			
@@ -35,79 +82,105 @@ tns.DataCluster .down.> tns.ClusterBody
 			
 			
 		
-	Abstract tns.ClusterBody{
+	
+Abstract tns.ClusterBody{
 }
+
 		
 			
 			
 		
-	Class tns.AltitudeCluster{
-+ identifier : xs.unsignedInt
-+ size : xs.short
-+ body : tns.FloatValue
+	
+Class tns.AltitudeCluster{
++identifier:xs:unsignedInt
++size:xs:short
++body:tns:FloatValue
 }
+
 tns.AltitudeCluster .down.> xs.unsignedInt
+
 tns.AltitudeCluster .down.> xs.short
+
 tns.AltitudeCluster .down.> tns.FloatValue
+
 		
 			
 tns.AltitudeCluster -up-|> tns.DataCluster
 		
-	Class tns.FloatValue{
-+ value : xs.float
+	
+Class tns.FloatValue{
++value:xs:float
 }
+
 tns.FloatValue .down.> xs.float
+
 		
 			
 tns.FloatValue -up-|> tns.ClusterBody
 		
-	Class tns.LatLong{
-+ latitude : xs.float
-+ longitude : xs.float
+	
+Class tns.LatLong{
++latitude:xs:float
++longitude:xs:float
 }
+
 tns.LatLong .down.> xs.float
+
 tns.LatLong .down.> xs.float
+
 		
 			
 tns.LatLong -up-|> tns.ClusterBody
 		
 
-	Class tns.PositionCluster{
-+ identifier : xs.unsignedInt
-+ size : xs.short
-+ body : tns.LatLong
+	
+Class tns.PositionCluster{
++identifier:xs:unsignedInt
++size:xs:short
++body:tns:LatLong
 }
+
 tns.PositionCluster .down.> xs.unsignedInt
+
 tns.PositionCluster .down.> xs.short
+
 tns.PositionCluster .down.> tns.LatLong
+
 		
 			
 tns.PositionCluster -up-|> tns.DataCluster
 
 		
-	Class tns.FixPoint{
-+ identifier : xs.unsignedInt
-+ size : xs.short
-+ fixMarker : tns.listOfCharacters
-+ ident : tns.listOfCharacters
-+ position : tns.PositionCluster
+	
+Class tns.FixPoint{
++identifier:xs:unsignedInt
++size:xs:short
++fixMarker:tns:listOfCharacters
++ident:tns:listOfCharacters
++position:tns:PositionCluster
 }
+
 tns.FixPoint .down.> xs.unsignedInt
+
 tns.FixPoint .down.> xs.short
+
 tns.FixPoint .down.> tns.listOfCharacters
+
 tns.FixPoint .down.> tns.listOfCharacters
+
 tns.FixPoint .down.> tns.PositionCluster
+
 		
 			
 tns.FixPoint -up-|> tns.DataCluster
 		
 	
 !enduml
-*!
-*!
-*!
+
 !*> Code sippets
 !listing cpp {
 cout << "hello world !";
 }
+*!
+*!
 *!

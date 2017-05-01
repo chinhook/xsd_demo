@@ -1,37 +1,1364 @@
 
-!*> Interface Requirement Specification
-
+!** Interface Requirement Specification
 !1 Interface Requirement Specification
 !*> Primitive types
-!2 Primitive type encoding definitions
-!|Basic type | XSD base type |Size in bits| Min | Max|Endianness |
+|'''Primitive type encoding definitions'''                                                                                               |
+|!style_meta[Basic type]|!style_meta[XSD base type] |!style_meta[Size in bits]|!style_meta[Min]| !style_meta[Max]|!style_meta[Endianness]|
 |Unsigned Byte |xs:unsignedByte | 8 bits |0 |255 |n/a |
 |Unsigned Short |xs:unsignedShort| 16 bits |0 |65535 |Big Endian |
 |Unsigned Integer|xs:unsignedByte | 8 bits |0 |4294967295|Big Endian |
 |IEEE 754 Floating point simple precision|xs:float|32 bits|||Big Endian |
 *!
-!*> Models
+!** Models
 !startuml
-class Demo{
+class Demo {
 + hello : string
 + world : char *
 }
 !enduml
-!*> Complex type definitions
+!*> Simple types overview
+!startuml
+Enum IdentFpln <<tns:Unsigned8>> {
++TEMPORARY:0
++SECONDARY1:1
++ACTIVE:2
++SECONDARY2_Provision:3
++SECONDARY3_Provision:4
+}
+Class FixMarker <<xs:string>>
+Class IdentRoute <<xs:string>>
+Class LegMarker <<tns:Unsigned32>>
+Class IdentNavaid <<tns:CharArray>>
+Class IdentRunway <<tns:CharArray>>
+Class IdentAirport <<tns:CharArray>>
+Class FixName <<xs:string>>
+Class IdentFix <<xs:string>>
+Enum NorthReference <<tns:Unsigned8>> {
++NOT_DEFINED:0
++TRUE_NORTH:1
++MAGNETIC_NORTH:2
+}
+Class t_NavdbId_StandardDB <<tns:IdentNavDb>>
+Enum IdentNavDb <<tns:Unsigned8>> {
++ALL:0
++STANDARD_DATABASE:1
++PILOT_DATABASE:2
++COROUTE_DATABASE:3
++STANDARD_DATABASE_SECOND_CYCLE_PROVISION:4
++COROUTE_DATABASE_SECOND_CYCLE_PROVISION:5
++MAGNETIC_VARIATION_TABLE_PROVISION:6
++SYSTEM_CONFIGURATION_TABLE_PROVISION:7
+}
+Class t_NavdbId_PilotDB <<tns:IdentNavDb>>
+Class t_NavdbId_CompanyDB <<tns:IdentNavDb>>
+Class t_NavdbId_All <<tns:IdentNavDb>>
+Enum NavdbItemKind <<tns:Unsigned8>> {
++AIRPORTS:0
++NAVAIDS:1
++ROUTES_PROVISION:2
++AIRWAYS_PROVISION:3
++WAYPOINTS:4
++HELIPORT_PLATFORM:5
++RUNWAYS_PROVISION:6
++SID_RUNWAY_TRANS_PROVISION:7
++SID_ENROUTE_TRANS_PROVISION:8
++SID_PROVISION:9
++STAR_ENROUTE_TRANS_PROVISION:10
++STAR_PROVISION:11
++COMMON_ROUTE_STAR_PROVISION:12
++VIA_PROVISION:13
++APPROACHES_PROVISION:14
+}
+Class t_NavdbItemKind_Waypoints <<tns:NavdbItemKind>>
+Class t_NavdbItemKind_Airports <<tns:NavdbItemKind>>
+Class t_NavdbItemKind_Navaids <<tns:NavdbItemKind>>
+Enum AltitudeReference <<tns:Unsigned8>> {
++STDANDARD:0
++QNH:1
+}
+Class CruiseMode <<tns:Unsigned8>>
+Enum LegTransitionType <<tns:Unsigned8>> {
++FLYBY:0
++OVERFLY:1
+}
+Enum StatusMissionArea <<tns:Unsigned8>> {
++STOP:0
++START:1
+}
+Enum TurnDirection <<tns:Unsigned8>> {
++RIGHT:0
++LEFT:1
+}
+Class t_RouteLegIndex <<tns:Unsigned8>>
+Enum FmsEvent <<tns:Unsigned8>> {
++PREDICTIONS_UPDATE:0
++NEW_CONFIGURATION:1
+}
+Class Timestamp <<tns:Unsigned32>>
+Class CommandsOfUd <<tns:Unsigned32>>
+Enum AltitudeConstraintType <<tns:Unsigned8>> {
++AT:0
++AT_A:1
++AT_B:2
++WINDOW:3
+}
+Enum AltitudeConstraintStatus <<tns:Unsigned8>> {
++MADE:0
++MISSED:1
++IGNORED:2
++REJECTED:3
+}
+Enum AltitudeReferenceForConstraint <<tns:Unsigned8>> {
++STD:0
++QNH:1
++MSL:2
+}
+Enum AltitudeReferenceForCockpit <<tns:AltitudeReferenceForConstraint>> {
++:0
++:1
+}
+Class Altitude <<tns:Float32>>
+Class TemperatureSat <<tns:Float32>>
+Class Qnh <<tns:Unsigned32>>
+Enum AltitudeDisplay <<tns:Unsigned8>> {
++FL:0
++CXXXXX:1
++XXXXX:2
+}
+Enum RtaType <<tns:Unsigned8>> {
++RTA_AT:0
++RTA_AT_A:1
++RTA_AT_B:2
++RTA_WINDOW:3
+}
+Class Rta <<tns:Unsigned32>>
+Enum Rta_Status <<tns:Unsigned8>> {
++PASSED:0
++MISSED:1
+}
+Enum SpeedConstraintType <<tns:Unsigned8>> {
++SPD_AT:0
++SPD_AT_A:1
++SPD_AT_B:2
++SPD_WINDOW:3
+}
+Class Speed <<tns:Float32>>
+Enum HdgTrackMode <<tns:Unsigned8>> {
++COURSE:0
++HEADING:1
+}
+Class Altitude_Step <<tns:Float32>>
+Enum StepStatus <<tns:Unsigned8>> {
++Not_Discarded:0
++Discarded:1
+}
+Enum MissionStatus <<tns:Unsigned8>> {
++INACTIVE:0
++ACTIVE:1
+}
+Class ProcMarker <<tns:Unsigned32>>
+Class AngleBearing <<tns:Float32>>
+Class AngleWindDirection <<tns:Float32>>
+Class AngleMagneticVariation <<tns:Float32>>
+Class AngleSarSpacing <<tns:Float32>>
+Class DistanceShort <<tns:Float32>>
+Class Distance <<tns:Float32>>
+Class MaxNumberOfNearest <<tns:Unsigned32>>
+Enum SectionOrSubSectionType <<tns:Unsigned8>> {
++CPSS:0
++RTA_CPSS:1
++Climb:2
++Cruise_Climb:3
++Cruise:4
++RTA_Cruise:5
++Cruise_Descent:6
++RTA_Cruise_Descent:7
++Descent:8
++RTA_Descent:9
++Approach:10
++RTA_Approach:11
+}
+Class index <<tns:Unsigned8>>
+Class ProvisionFloat32 <<tns:Float32>>
+Class Weight <<tns:Float32>>
+Class FuelFlow <<tns:Float32>>
+Class AltitudeStd <<tns:Float32>>
+Enum VerticalSegment <<tns:Unsigned8>> {
++Init_Point:0
++Straight:1
++Straight_Disco_Provision:2
+}
+Enum Validity <<tns:Boolean>> {
++Invalid:0
++Valid:1
+}
+Class Slope <<tns:Float32>>
+Enum RunwayType <<tns:Unsigned8>> {
++None:0
++Runway:1
++Helipad:2
+}
+Enum Qual1 <<tns:Unsigned8>> {
++Others:0
++F_RNP_AR:1
+}
+Class IdentSid <<xs:string>>
+Class IdentSidEnrouteTrans <<xs:string>>
+Enum ApproachType <<tns:Unsigned8>> {
++Other:0
++B:1
++D:2
++F:3
++G:4
++H:5
++I:6
++J:7
++L:8
++M:9
++N:10
++P:11
++Q:12
++R:13
++S:14
++T:15
++U:16
++V:17
++W:18
++X:19
++Y:20
+}
+Class IdentStar <<xs:string>>
+Class IdentStarEnrouteTrans <<xs:string>>
+Class IdentAppTrans <<xs:string>>
+Enum UserApproach <<tns:Unsigned8>> {
++Autonomous:0
++Platform_Offset:1
++Platform_Delta:2
+}
+Enum PseudoWaypointType <<tns:Unsigned8>> {
++TOC:0
++TOD:1
++NRP:2
++INTC:3
++INTD:4
++SACP_UP_CLB:5
++SACP_UP_CRZ:6
++SACP_DOWN_CRZ:7
++SACP_DOWN_VNAV_ADV:8
++SACP_DOWN_VNAV_DSCT:9
++SAIP:10
++LOIP_UP:11
++LOIP_DOWN:12
++VPIP:13
+}
+Class Time <<tns:Unsigned32>>
+Class LegIdent <<xs:string>>
+Enum StepCruiseMode <<tns:Unsigned8>> {
++Cruise_Mode_1:0
++Cruise_Mode_2:1
++Cruise_Mode_3:2
++Cruise_Mode_4:3
++Cruise_Mode_5:4
++Cruise_Mode_6:5
+}
+Class AtmosphericPressure <<tns:Float32>>
+Enum LegType <<tns:Unsigned8>> {
++VA:0
++VD:1
++VI:2
++VM:3
++VR:4
++CA:5
++CD:6
++CR:7
++CI:8
++CF:9
++FA:10
++FM:11
++HA:12
++HF:13
++HM:14
++IF:15
++TF:16
++RF:17
++AF:18
++DF:19
++PI:20
++FC:21
++FD:22
++PPOS:23
+}
+Enum FixSpec <<tns:Unsigned8>> {
++IAF:0
++FAF:1
++MAP:2
++MOV:3
++TDN:4
++RALLY_POINT:5
++ABEAM_DTO_FIX:6
++ATO:7
++LAT_CROSS:8
++LON_CROSS:9
++DEST_AIRPORT:10
++DEST_RWY:11
+}
+Enum StdProcType <<tns:Unsigned8>> {
++NONE:0
++SID_COMMON_ROUTE:1
++SID_RUNWAY_TRANS:2
++SID_ENROUTE_TRANS:3
++SID_ENGINE_OUT:4
++APPROACH:5
++APPROACH_TRANS:6
++STAR_COMMON_ROUTE:7
++STAR_RUNWAY_TRANS:8
++STAR_ENROUTE_TRANS:9
++MISSED_APPROACH:10
++ACTIVE_MISSED_APPROACH:11
++DTO_MISSED_APPROACH:12
+}
+Enum PatternType <<tns:Unsigned8>> {
++NONE_PATTERN:0
++HOVER:1
++AIRWAY:2
++SAR:3
++USER_APPROACH:4
+}
+Enum LateralSegmentType <<tns:Unsigned8>> {
++INIT_POINT:0
++STRAIGHT:1
++CURVE_RIGHT:2
++CURVE_LEFT:3
++STRAIGHT_DISCO_PROVISION:4
+}
+Class Elevation <<tns:Float32>>
+Class Latitude <<tns:Float32>>
+Class Longitude <<tns:Float32>>
+Class AngleFpa <<tns:Float32>>
+Enum StatusRequest <<tns:Unsigned8>> {
++OK:0
++NOT_AVAILABLE:1
++INVALID_PARAMETER:2
++INTERNAL_ERROR:3
++NOT_IN_DATABASE:4
++NOT_ALLOWED:5
++RANGE_ERROR:6
++IDENT_ALREADY_USED:7
++MEMORY_FULL:8
++TMPY_EXISTS:9
++NO_VALID_INTERSECTION:10
++FPLN_FULL:11
++XFER_FAIL:12
++TMPY_WPT_MAX_CAPACITY_REACHED:13
++SECONDARY_FPLN_FULL:14
++IN_PROGRESS:15
++NO_APPROACH_LOADED:16
+}
+Enum t_FixType <<tns:Unsigned8>> {
++STD_AIRPORT:0
++STD_VOR_NAVAID:1
++STD_DME_NAVAID:2
++STD_VOR_DME_C_NAVAID:3
++STD_VOR_DME_NC_NAVAID:4
++STD_ILS_LOC_ONLY_NAVAID:5
++STD_ILD_DME_NAVAID:6
++STD_TERM_NDB_NAVAID:7
++STD_ENROUTE_NDB_NAVAID:8
++STD_TERMINAL_WAYPOINT:9
++STD_ENROUTE_WAYPOINT:10
++PILOT_NAVAID:11
++PILOT_AIRPORT:12
++STD_RUNWAY:13
++PILOT_WAYPOINT:14
+}
+Class IcaoCode <<tns:CharArray>>
+Class Frequency <<tns:Unsigned32>>
+Enum FigureOfMerit <<tns:Unsigned8>> {
++TERMINAL_USE:0
++LOW_ALTITUDE_USE:1
++HIGH_ALTITUDE_USE:2
++EXTENDED_HIGH_ALTITUDE:3
+}
+Enum IlsCategory <<tns:Unsigned8>> {
++ILS_CAT_0:0
++ILS_CAT_1:1
++ILS_CAT_2:2
++ILS_CAT_3:3
+}
+Enum t_NavaidType <<tns:Unsigned8>> {
++VOR:0
++DME:1
++TACAN:2
++VOR_DME_COLOCATED:3
++VOR_TAC_COLOCATED:4
+}
+Enum StatusPilotItem <<tns:Unsigned8>> {
++USED:0
++NOT_USED:1
++NOT_APPLICABLE:2
+}
+Enum StatusSar <<tns:Unsigned8>> {
++STATUSSAR_RESUME:0
++STATUSSAR_INTERRUPT:1
+}
+Enum StatusOverfly <<tns:Unsigned8>> {
++OVERFLYSTATUS_FLYBY:0
++OVERFLYSTATUS_OVERFLY:1
+}
+Enum StatusDiscontinuity <<tns:Unsigned8>> {
++WITHOUT_DISCONTINUITY:0
++WITH_DISCONTINUITY:1
+}
+Class FixIndex <<tns:Unsigned32>>
+Enum OptionFixInsertion <<tns:Unsigned8>> {
++BEFORESELECTEDFPLNLEG_PROVISION:0
++AFTERSELECTEDFPLNLEG:1
++BEFOREMISSION_PROVISION:2
++ENDOFFPLN_PROVISION:3
+}
+Enum OptionActivateLeg <<tns:Unsigned8>> {
++ACTIVATELEGOPTION_DIRECTTO:0
++ACTIVATELEGOPTION_MANUALSEQUENCING:1
+}
+Class IdentAirway <<xs:string>>
+Class ChannelNavaid <<tns:CharArray>>
+Class ApiFplnNewConfig <<tns:Unsigned32>>
+Class IdentNavDbItem <<xs:string>>
+Class IdentApproach <<xs:string>>
+Class IdentTransition <<xs:string>>
+Enum OptionClearConstraint <<tns:Unsigned8>> {
++OPTIONCLEARCONSTRAINT_ALL_CONSTRAINTS:0
++OPTIONCLEARCONSTRAINT_ALTITUDE_CONSTRAINT:1
++OPTIONCLEARCONSTRAINT_RTA_CONSTRAINT:2
++OPTIONCLEARCONSTRAINT_SPEED_CONSTRAINT:3
++OPTIONCLEARCONSTRAINT_FPA_CONSTRAINT:4
++OPTIONCLEARCONSTRAINT_STEP_CONSTRAINT:5
+}
+Enum StatusCompensationTemperature <<tns:Unsigned8>> {
++STATUSCOMPENSATIONTEMPERATURE_INACTIVE:0
++STATUSCOMPENSATIONTEMPERATURE_ACTIVE:1
+}
+Enum OptionDepartureDestination <<tns:Unsigned8>> {
++OPTIONDEPARTUREDESTINATION_DEPARTURE:0
++OPTIONDEPARTUREDESTINATION_DESTINATION:1
+}
+!enduml
+*!
+*!
+!** Simple content details
+!**> Enumerations
+!*> IdentFpln ( tns:Unsigned8 )
+|'''IdentFpln'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|TEMPORARY|
+|1|SECONDARY1|
+|2|ACTIVE|
+|3|SECONDARY2_Provision|
+|4|SECONDARY3_Provision|
+*!
+
+!*> NorthReference ( tns:Unsigned8 )
+|'''NorthReference'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|NOT_DEFINED|
+|1|TRUE_NORTH|
+|2|MAGNETIC_NORTH|
+*!
+
+!*> IdentNavDb ( tns:Unsigned8 )
+|'''IdentNavDb'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|ALL|
+|1|STANDARD_DATABASE|
+|2|PILOT_DATABASE|
+|3|COROUTE_DATABASE|
+|4|STANDARD_DATABASE_SECOND_CYCLE_PROVISION|
+|5|COROUTE_DATABASE_SECOND_CYCLE_PROVISION|
+|6|MAGNETIC_VARIATION_TABLE_PROVISION|
+|7|SYSTEM_CONFIGURATION_TABLE_PROVISION|
+*!
+
+!*> NavdbItemKind ( tns:Unsigned8 )
+|'''NavdbItemKind'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|AIRPORTS|
+|1|NAVAIDS|
+|2|ROUTES_PROVISION|
+|3|AIRWAYS_PROVISION|
+|4|WAYPOINTS|
+|5|HELIPORT_PLATFORM|
+|6|RUNWAYS_PROVISION|
+|7|SID_RUNWAY_TRANS_PROVISION|
+|8|SID_ENROUTE_TRANS_PROVISION|
+|9|SID_PROVISION|
+|10|STAR_ENROUTE_TRANS_PROVISION|
+|11|STAR_PROVISION|
+|12|COMMON_ROUTE_STAR_PROVISION|
+|13|VIA_PROVISION|
+|14|APPROACHES_PROVISION|
+*!
+
+!*> AltitudeReference ( tns:Unsigned8 )
+|'''AltitudeReference'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|STDANDARD|
+|1|QNH|
+*!
+
+!*> LegTransitionType ( tns:Unsigned8 )
+|'''LegTransitionType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|FLYBY|
+|1|OVERFLY|
+*!
+
+!*> StatusMissionArea ( tns:Unsigned8 )
+|'''StatusMissionArea'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|STOP|
+|1|START|
+*!
+
+!*> TurnDirection ( tns:Unsigned8 )
+|'''TurnDirection'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|RIGHT|
+|1|LEFT|
+*!
+
+!*> FmsEvent ( tns:Unsigned8 )
+|'''FmsEvent'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|PREDICTIONS_UPDATE|
+|1|NEW_CONFIGURATION|
+*!
+
+!*> AltitudeConstraintType ( tns:Unsigned8 )
+|'''AltitudeConstraintType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|AT|
+|1|AT_A|
+|2|AT_B|
+|3|WINDOW|
+*!
+
+!*> AltitudeConstraintStatus ( tns:Unsigned8 )
+|'''AltitudeConstraintStatus'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|MADE|
+|1|MISSED|
+|2|IGNORED|
+|3|REJECTED|
+*!
+
+!*> AltitudeReferenceForConstraint ( tns:Unsigned8 )
+|'''AltitudeReferenceForConstraint'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|STD|
+|1|QNH|
+|2|MSL|
+*!
+
+!*> AltitudeReferenceForCockpit ( tns:AltitudeReferenceForConstraint )
+|'''AltitudeReferenceForCockpit'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0||
+|1||
+*!
+
+!*> AltitudeDisplay ( tns:Unsigned8 )
+|'''AltitudeDisplay'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|FL|
+|1|CXXXXX|
+|2|XXXXX|
+*!
+
+!*> RtaType ( tns:Unsigned8 )
+|'''RtaType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|RTA_AT|
+|1|RTA_AT_A|
+|2|RTA_AT_B|
+|3|RTA_WINDOW|
+*!
+
+!*> Rta_Status ( tns:Unsigned8 )
+|'''Rta_Status'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|PASSED|
+|1|MISSED|
+*!
+
+!*> SpeedConstraintType ( tns:Unsigned8 )
+|'''SpeedConstraintType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|SPD_AT|
+|1|SPD_AT_A|
+|2|SPD_AT_B|
+|3|SPD_WINDOW|
+*!
+
+!*> HdgTrackMode ( tns:Unsigned8 )
+|'''HdgTrackMode'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|COURSE|
+|1|HEADING|
+*!
+
+!*> StepStatus ( tns:Unsigned8 )
+|'''StepStatus'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|Not_Discarded|
+|1|Discarded|
+*!
+
+!*> MissionStatus ( tns:Unsigned8 )
+|'''MissionStatus'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|INACTIVE|
+|1|ACTIVE|
+*!
+
+!*> SectionOrSubSectionType ( tns:Unsigned8 )
+|'''SectionOrSubSectionType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|CPSS|
+|1|RTA_CPSS|
+|2|Climb|
+|3|Cruise_Climb|
+|4|Cruise|
+|5|RTA_Cruise|
+|6|Cruise_Descent|
+|7|RTA_Cruise_Descent|
+|8|Descent|
+|9|RTA_Descent|
+|10|Approach|
+|11|RTA_Approach|
+*!
+
+!*> VerticalSegment ( tns:Unsigned8 )
+|'''VerticalSegment'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|Init_Point|
+|1|Straight|
+|2|Straight_Disco_Provision|
+*!
+
+!*> Validity ( tns:Boolean )
+|'''Validity'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|Invalid|
+|1|Valid|
+*!
+
+!*> RunwayType ( tns:Unsigned8 )
+|'''RunwayType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|None|
+|1|Runway|
+|2|Helipad|
+*!
+
+!*> Qual1 ( tns:Unsigned8 )
+|'''Qual1'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|Others|
+|1|F_RNP_AR|
+*!
+
+!*> ApproachType ( tns:Unsigned8 )
+|'''ApproachType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|Other|
+|1|B|
+|2|D|
+|3|F|
+|4|G|
+|5|H|
+|6|I|
+|7|J|
+|8|L|
+|9|M|
+|10|N|
+|11|P|
+|12|Q|
+|13|R|
+|14|S|
+|15|T|
+|16|U|
+|17|V|
+|18|W|
+|19|X|
+|20|Y|
+*!
+
+!*> UserApproach ( tns:Unsigned8 )
+|'''UserApproach'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|Autonomous|
+|1|Platform_Offset|
+|2|Platform_Delta|
+*!
+
+!*> PseudoWaypointType ( tns:Unsigned8 )
+|'''PseudoWaypointType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|TOC|
+|1|TOD|
+|2|NRP|
+|3|INTC|
+|4|INTD|
+|5|SACP_UP_CLB|
+|6|SACP_UP_CRZ|
+|7|SACP_DOWN_CRZ|
+|8|SACP_DOWN_VNAV_ADV|
+|9|SACP_DOWN_VNAV_DSCT|
+|10|SAIP|
+|11|LOIP_UP|
+|12|LOIP_DOWN|
+|13|VPIP|
+*!
+
+!*> StepCruiseMode ( tns:Unsigned8 )
+|'''StepCruiseMode'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|Cruise_Mode_1|
+|1|Cruise_Mode_2|
+|2|Cruise_Mode_3|
+|3|Cruise_Mode_4|
+|4|Cruise_Mode_5|
+|5|Cruise_Mode_6|
+*!
+
+!*> LegType ( tns:Unsigned8 )
+|'''LegType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|VA|
+|1|VD|
+|2|VI|
+|3|VM|
+|4|VR|
+|5|CA|
+|6|CD|
+|7|CR|
+|8|CI|
+|9|CF|
+|10|FA|
+|11|FM|
+|12|HA|
+|13|HF|
+|14|HM|
+|15|IF|
+|16|TF|
+|17|RF|
+|18|AF|
+|19|DF|
+|20|PI|
+|21|FC|
+|22|FD|
+|23|PPOS|
+*!
+
+!*> FixSpec ( tns:Unsigned8 )
+|'''FixSpec'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|IAF|
+|1|FAF|
+|2|MAP|
+|3|MOV|
+|4|TDN|
+|5|RALLY_POINT|
+|6|ABEAM_DTO_FIX|
+|7|ATO|
+|8|LAT_CROSS|
+|9|LON_CROSS|
+|10|DEST_AIRPORT|
+|11|DEST_RWY|
+*!
+
+!*> StdProcType ( tns:Unsigned8 )
+|'''StdProcType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|NONE|
+|1|SID_COMMON_ROUTE|
+|2|SID_RUNWAY_TRANS|
+|3|SID_ENROUTE_TRANS|
+|4|SID_ENGINE_OUT|
+|5|APPROACH|
+|6|APPROACH_TRANS|
+|7|STAR_COMMON_ROUTE|
+|8|STAR_RUNWAY_TRANS|
+|9|STAR_ENROUTE_TRANS|
+|10|MISSED_APPROACH|
+|11|ACTIVE_MISSED_APPROACH|
+|12|DTO_MISSED_APPROACH|
+*!
+
+!*> PatternType ( tns:Unsigned8 )
+|'''PatternType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|NONE_PATTERN|
+|1|HOVER|
+|2|AIRWAY|
+|3|SAR|
+|4|USER_APPROACH|
+*!
+
+!*> LateralSegmentType ( tns:Unsigned8 )
+|'''LateralSegmentType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|INIT_POINT|
+|1|STRAIGHT|
+|2|CURVE_RIGHT|
+|3|CURVE_LEFT|
+|4|STRAIGHT_DISCO_PROVISION|
+*!
+
+!*> StatusRequest ( tns:Unsigned8 )
+|'''StatusRequest'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|OK|
+|1|NOT_AVAILABLE|
+|2|INVALID_PARAMETER|
+|3|INTERNAL_ERROR|
+|4|NOT_IN_DATABASE|
+|5|NOT_ALLOWED|
+|6|RANGE_ERROR|
+|7|IDENT_ALREADY_USED|
+|8|MEMORY_FULL|
+|9|TMPY_EXISTS|
+|10|NO_VALID_INTERSECTION|
+|11|FPLN_FULL|
+|12|XFER_FAIL|
+|13|TMPY_WPT_MAX_CAPACITY_REACHED|
+|14|SECONDARY_FPLN_FULL|
+|15|IN_PROGRESS|
+|16|NO_APPROACH_LOADED|
+*!
+
+!*> t_FixType ( tns:Unsigned8 )
+|'''t_FixType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|STD_AIRPORT|
+|1|STD_VOR_NAVAID|
+|2|STD_DME_NAVAID|
+|3|STD_VOR_DME_C_NAVAID|
+|4|STD_VOR_DME_NC_NAVAID|
+|5|STD_ILS_LOC_ONLY_NAVAID|
+|6|STD_ILD_DME_NAVAID|
+|7|STD_TERM_NDB_NAVAID|
+|8|STD_ENROUTE_NDB_NAVAID|
+|9|STD_TERMINAL_WAYPOINT|
+|10|STD_ENROUTE_WAYPOINT|
+|11|PILOT_NAVAID|
+|12|PILOT_AIRPORT|
+|13|STD_RUNWAY|
+|14|PILOT_WAYPOINT|
+*!
+
+!*> FigureOfMerit ( tns:Unsigned8 )
+|'''FigureOfMerit'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|TERMINAL_USE|
+|1|LOW_ALTITUDE_USE|
+|2|HIGH_ALTITUDE_USE|
+|3|EXTENDED_HIGH_ALTITUDE|
+*!
+
+!*> IlsCategory ( tns:Unsigned8 )
+|'''IlsCategory'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|ILS_CAT_0|
+|1|ILS_CAT_1|
+|2|ILS_CAT_2|
+|3|ILS_CAT_3|
+*!
+
+!*> t_NavaidType ( tns:Unsigned8 )
+|'''t_NavaidType'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|VOR|
+|1|DME|
+|2|TACAN|
+|3|VOR_DME_COLOCATED|
+|4|VOR_TAC_COLOCATED|
+*!
+
+!*> StatusPilotItem ( tns:Unsigned8 )
+|'''StatusPilotItem'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|USED|
+|1|NOT_USED|
+|2|NOT_APPLICABLE|
+*!
+
+!*> StatusSar ( tns:Unsigned8 )
+|'''StatusSar'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|STATUSSAR_RESUME|
+|1|STATUSSAR_INTERRUPT|
+*!
+
+!*> StatusOverfly ( tns:Unsigned8 )
+|'''StatusOverfly'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|OVERFLYSTATUS_FLYBY|
+|1|OVERFLYSTATUS_OVERFLY|
+*!
+
+!*> StatusDiscontinuity ( tns:Unsigned8 )
+|'''StatusDiscontinuity'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|WITHOUT_DISCONTINUITY|
+|1|WITH_DISCONTINUITY|
+*!
+
+!*> OptionFixInsertion ( tns:Unsigned8 )
+|'''OptionFixInsertion'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|BEFORESELECTEDFPLNLEG_PROVISION|
+|1|AFTERSELECTEDFPLNLEG|
+|2|BEFOREMISSION_PROVISION|
+|3|ENDOFFPLN_PROVISION|
+*!
+
+!*> OptionActivateLeg ( tns:Unsigned8 )
+|'''OptionActivateLeg'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|ACTIVATELEGOPTION_DIRECTTO|
+|1|ACTIVATELEGOPTION_MANUALSEQUENCING|
+*!
+
+!*> OptionClearConstraint ( tns:Unsigned8 )
+|'''OptionClearConstraint'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|OPTIONCLEARCONSTRAINT_ALL_CONSTRAINTS|
+|1|OPTIONCLEARCONSTRAINT_ALTITUDE_CONSTRAINT|
+|2|OPTIONCLEARCONSTRAINT_RTA_CONSTRAINT|
+|3|OPTIONCLEARCONSTRAINT_SPEED_CONSTRAINT|
+|4|OPTIONCLEARCONSTRAINT_FPA_CONSTRAINT|
+|5|OPTIONCLEARCONSTRAINT_STEP_CONSTRAINT|
+*!
+
+!*> StatusCompensationTemperature ( tns:Unsigned8 )
+|'''StatusCompensationTemperature'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|STATUSCOMPENSATIONTEMPERATURE_INACTIVE|
+|1|STATUSCOMPENSATIONTEMPERATURE_ACTIVE|
+*!
+
+!*> OptionDepartureDestination ( tns:Unsigned8 )
+|'''OptionDepartureDestination'''|
+|!style_meta[Value]|!style_meta[Meaning]|
+|0|OPTIONDEPARTUREDESTINATION_DEPARTURE|
+|1|OPTIONDEPARTUREDESTINATION_DESTINATION|
+*!
+
+*!
+!**> Numerics
+!*> LegMarker ( tns:Unsigned32 )
+|'''LegMarker'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_NavdbId_StandardDB ( tns:IdentNavDb )
+|'''t_NavdbId_StandardDB'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_NavdbId_PilotDB ( tns:IdentNavDb )
+|'''t_NavdbId_PilotDB'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_NavdbId_CompanyDB ( tns:IdentNavDb )
+|'''t_NavdbId_CompanyDB'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_NavdbId_All ( tns:IdentNavDb )
+|'''t_NavdbId_All'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_NavdbItemKind_Waypoints ( tns:NavdbItemKind )
+|'''t_NavdbItemKind_Waypoints'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_NavdbItemKind_Airports ( tns:NavdbItemKind )
+|'''t_NavdbItemKind_Airports'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_NavdbItemKind_Navaids ( tns:NavdbItemKind )
+|'''t_NavdbItemKind_Navaids'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> CruiseMode ( tns:Unsigned8 )
+|'''CruiseMode'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> t_RouteLegIndex ( tns:Unsigned8 )
+|'''t_RouteLegIndex'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Timestamp ( tns:Unsigned32 )
+|'''Timestamp'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> CommandsOfUd ( tns:Unsigned32 )
+|'''CommandsOfUd'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Altitude ( tns:Float32 )
+|'''Altitude'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+||[-500 .. 20421]|feet|
+*!
+
+!*> TemperatureSat ( tns:Float32 )
+|'''TemperatureSat'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+||[-60 .. 99]|degree|
+*!
+
+!*> Qnh ( tns:Unsigned32 )
+|'''Qnh'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+||[90000 .. 110000]|Pascal|
+*!
+
+!*> Rta ( tns:Unsigned32 )
+|'''Rta'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Speed ( tns:Float32 )
+|'''Speed'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Altitude_Step ( tns:Float32 )
+|'''Altitude_Step'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> ProcMarker ( tns:Unsigned32 )
+|'''ProcMarker'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> AngleBearing ( tns:Float32 )
+|'''AngleBearing'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Bearing|[0 .. 2*PI[|degree|
+*!
+
+!*> AngleWindDirection ( tns:Float32 )
+|'''AngleWindDirection'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Wind direction|[0 .. 2*PI[|degree|
+*!
+
+!*> AngleMagneticVariation ( tns:Float32 )
+|'''AngleMagneticVariation'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Magnetic Variation|]-PI .. PI]|degree|
+*!
+
+!*> AngleSarSpacing ( tns:Float32 )
+|'''AngleSarSpacing'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|SAR sector spacing|[PI/18 .. PI/2]|degree|
+*!
+
+!*> DistanceShort ( tns:Float32 )
+|'''DistanceShort'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Short horizontal distance (ex: runway)|[0 .. 200000]|feet|
+*!
+
+!*> Distance ( tns:Float32 )
+|'''Distance'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Horizontal distance|[0 .. 200000]|Nautical_Miles|
+*!
+
+!*> MaxNumberOfNearest ( tns:Unsigned32 )
+|'''MaxNumberOfNearest'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+||[0 .. 120]|feet|
+*!
+
+!*> index ( tns:Unsigned8 )
+|'''index'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> ProvisionFloat32 ( tns:Float32 )
+|'''ProvisionFloat32'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Weight ( tns:Float32 )
+|'''Weight'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> FuelFlow ( tns:Float32 )
+|'''FuelFlow'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> AltitudeStd ( tns:Float32 )
+|'''AltitudeStd'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Slope ( tns:Float32 )
+|'''Slope'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Time ( tns:Unsigned32 )
+|'''Time'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> AtmosphericPressure ( tns:Float32 )
+|'''AtmosphericPressure'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> Elevation ( tns:Float32 )
+|'''Elevation'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Elevation| .. ]|feet|
+*!
+
+!*> Latitude ( tns:Float32 )
+|'''Latitude'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Latitude. ± 0.000003 rad (~19m or 0.01min)|[-PI/2 .. PI/2]|degree|
+*!
+
+!*> Longitude ( tns:Float32 )
+|'''Longitude'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|Longitude. ± 0.000003 rad (~19m or 0.01min)|]-PI .. PI]|degree|
+*!
+
+!*> AngleFpa ( tns:Float32 )
+|'''AngleFpa'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|FPA|[0 .. PI/18]|degree|
+*!
+
+!*> Frequency ( tns:Unsigned32 )
+|'''Frequency'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> FixIndex ( tns:Unsigned32 )
+|'''FixIndex'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+!*> ApiFplnNewConfig ( tns:Unsigned32 )
+|'''ApiFplnNewConfig'''|
+|!style_meta[description]|!style_meta[range]|!style_meta[unit]|
+|| .. ||
+*!
+
+*!
+!**> Strings
+!*> FixMarker ( xs:string )
+|'''FixMarker'''|
+|!style_meta[length]|!style_meta[pattern]|
+|12|!style_ignore(nothing)|
+*!
+
+!*> IdentRoute ( xs:string )
+|'''IdentRoute'''|
+|!style_meta[length]|!style_meta[pattern]|
+|10|!style_ignore(nothing)|
+*!
+
+!*> FixName ( xs:string )
+|'''FixName'''|
+|!style_meta[length]|!style_meta[pattern]|
+|16|!style_ignore(nothing)|
+*!
+
+!*> IdentFix ( xs:string )
+|'''IdentFix'''|
+|!style_meta[length]|!style_meta[pattern]|
+|5|!style_ignore(nothing)|
+*!
+
+!*> IdentSid ( xs:string )
+|'''IdentSid'''|
+|!style_meta[length]|!style_meta[pattern]|
+|7|!style_ignore(nothing)|
+*!
+
+!*> IdentSidEnrouteTrans ( xs:string )
+|'''IdentSidEnrouteTrans'''|
+|!style_meta[length]|!style_meta[pattern]|
+|6|!style_ignore(nothing)|
+*!
+
+!*> IdentStar ( xs:string )
+|'''IdentStar'''|
+|!style_meta[length]|!style_meta[pattern]|
+|7|!style_ignore(nothing)|
+*!
+
+!*> IdentStarEnrouteTrans ( xs:string )
+|'''IdentStarEnrouteTrans'''|
+|!style_meta[length]|!style_meta[pattern]|
+|6|!style_ignore(nothing)|
+*!
+
+!*> IdentAppTrans ( xs:string )
+|'''IdentAppTrans'''|
+|!style_meta[length]|!style_meta[pattern]|
+|6|!style_ignore(nothing)|
+*!
+
+!*> LegIdent ( xs:string )
+|'''LegIdent'''|
+|!style_meta[length]|!style_meta[pattern]|
+|7|!style_ignore(nothing)|
+*!
+
+!*> IdentAirway ( xs:string )
+|'''IdentAirway'''|
+|!style_meta[length]|!style_meta[pattern]|
+|7|[0-9A-Z][0-9A-Z\-]{4}|
+*!
+
+!*> IdentNavDbItem ( xs:string )
+|'''IdentNavDbItem'''|
+|!style_meta[length]|!style_meta[pattern]|
+|10|[0-9A-Z][0-9A-Z\-]{9}|
+*!
+
+!*> IdentApproach ( xs:string )
+|'''IdentApproach'''|
+|!style_meta[length]|!style_meta[pattern]|
+|7|[0-9A-Z][0-9A-Z\-]{5}|
+*!
+
+!*> IdentTransition ( xs:string )
+|'''IdentTransition'''|
+|!style_meta[length]|!style_meta[pattern]|
+|5|[0-9A-Z][0-9A-Z\-]{4}|
+*!
+
+!*> IdentNavaid ( tns:CharArray )
+|'''IdentNavaid'''|
+|!style_meta[length]|!style_meta[pattern]|
+|4|[0-9A-Z][0-9A-Z\-]{3}|
+*!
+
+!*> IdentRunway ( tns:CharArray )
+|'''IdentRunway'''|
+|!style_meta[length]|!style_meta[pattern]|
+|5|[0-9A-Z][0-9A-Z\-]{4}|
+*!
+
+!*> IdentAirport ( tns:CharArray )
+|'''IdentAirport'''|
+|!style_meta[length]|!style_meta[pattern]|
+|4|[0-9A-Z][0-9A-Z\-]{3}|
+*!
+
+!*> IcaoCode ( tns:CharArray )
+|'''IcaoCode'''|
+|!style_meta[length]|!style_meta[pattern]|
+|2|!style_ignore(nothing)|
+*!
+
+!*> ChannelNavaid ( tns:CharArray )
+|'''ChannelNavaid'''|
+|!style_meta[length]|!style_meta[pattern]|
+|4|(0[0-9][0-9]|1[0-1][0-9]|12[0-6])[XY]|
+*!
+
+*!
+*!
+!*> Complex types overview
+!startuml
+Class tns.FixPosition
+Abstract tns.ValidatedFloatBase
+Class tns.InvalidFloat
+Abstract tns.ValidFloatBase
+Class tns.ValidFloat
+Class tns.LatLon
+Class tns.t_Valid_ETA
+Class tns.t_Invalid_ETA
+Class tns.t_Valid_EFOB
+Class tns.t_Invalid_EFOB
+Class tns.t_Valid_Predicted_Speed
+Class tns.t_Invalid_Predicted_Speed
+Class tns.t_Valid_Predicted_Wind
+Class tns.t_Invalid_Predicted_Wind
+!enduml
+*!
+!*> Complex content details
 !startuml
 Class tns.FixPosition{
-+ fixMarker : .
-+ latitude : xs.float
-+ longitude : xs.float
+#fixMarker:xs:string
++latitude:xs:float
++longitude:xs:float
 }
-tns.FixPosition .down.> .
+
 tns.FixPosition .down.> xs.float
+
 tns.FixPosition .down.> xs.float
+
+tns.FixPosition *-down.> xs.string
+
 		
 			
 				
 					
-tns.FixPosition -up-|> xs.string
+						
+					
 				
 			
 			
@@ -39,146 +1366,212 @@ tns.FixPosition -up-|> xs.string
 			
 
 		
-	Abstract tns.ValidatedFloatBase{
-+ validity : xs.boolean
+	
+Abstract tns.ValidatedFloatBase{
++validity:xs:boolean
 }
+
 tns.ValidatedFloatBase .down.> xs.boolean
+
 		
 			
 		
-	Class tns.InvalidFloat{
-+ validity : xs.boolean
+	
+Class tns.InvalidFloat{
++validity:xs:boolean
 }
+
 tns.InvalidFloat .down.> xs.boolean
+
 		
 			
 tns.InvalidFloat -up-|> tns.ValidatedFloatBase
 		
-	Abstract tns.ValidFloatBase{
-+ validity : xs.boolean
+	
+Abstract tns.ValidFloatBase{
++validity:xs:boolean
 }
+
 tns.ValidFloatBase .down.> xs.boolean
+
 		
 			
 tns.ValidFloatBase -up-|> tns.ValidatedFloatBase
 		
-	Class tns.ValidFloat{
-+ value : xs.float
+	
+Class tns.ValidFloat{
++value:xs:float
 }
+
 tns.ValidFloat .down.> xs.float
+
 		
 			
-tns.ValidFloat -up-|> tns.ValidFloatBase
+				
+					
+				
+			
 		
-	Class tns.LatLon{
-+ latitude : tns.Latitude
-+ longitude : tns.Longitude
+	
+Class tns.LatLon{
++latitude:tns:Latitude
++longitude:tns:Longitude
 }
+
 tns.LatLon .down.> tns.Latitude
+
 tns.LatLon .down.> tns.Longitude
+
 		
 			
 			
 			
 			
 		
-	Class tns.t_Valid_ETA{
-+ Estimated_Time_Of_Arrival_Val : .
-+ Estimated_Time_Arrival : tns.Time
+	
+Class tns.t_Valid_ETA{
+#Estimated_Time_Of_Arrival_Val:tns:Validity
++Estimated_Time_Arrival:tns:Time
 }
-tns.t_Valid_ETA .down.> .
+
 tns.t_Valid_ETA .down.> tns.Time
+
+tns.t_Valid_ETA *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Valid_ETA -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 			
 			
 		
-	Class tns.t_Invalid_ETA{
-+ Estimated_Time_Of_Arrival_Val : .
+	
+Class tns.t_Invalid_ETA{
+#Estimated_Time_Of_Arrival_Val:tns:Validity
 }
-tns.t_Invalid_ETA .down.> .
+
+tns.t_Invalid_ETA *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Invalid_ETA -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 		
-	Class tns.t_Valid_EFOB{
-+ Estimate_Fuel_On_Board_Val : .
-+ Estimated_Fuel_On_Board : tns.Weight
+	
+Class tns.t_Valid_EFOB{
+#Estimate_Fuel_On_Board_Val:tns:Validity
++Estimated_Fuel_On_Board:tns:Weight
 }
-tns.t_Valid_EFOB .down.> .
+
 tns.t_Valid_EFOB .down.> tns.Weight
+
+tns.t_Valid_EFOB *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Valid_EFOB -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 			
 			
 		
-	Class tns.t_Invalid_EFOB{
-+ Estimate_Fuel_On_Board_Val : .
+	
+Class tns.t_Invalid_EFOB{
+#Estimate_Fuel_On_Board_Val:tns:Validity
 }
-tns.t_Invalid_EFOB .down.> .
+
+tns.t_Invalid_EFOB *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Invalid_EFOB -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 		
-	Class tns.t_Valid_Predicted_Speed{
-+ Predicted_Speed_Val : .
-+ Predicted_Speed : tns.Speed
+	
+Class tns.t_Valid_Predicted_Speed{
+#Predicted_Speed_Val:tns:Validity
++Predicted_Speed:tns:Speed
 }
-tns.t_Valid_Predicted_Speed .down.> .
+
 tns.t_Valid_Predicted_Speed .down.> tns.Speed
+
+tns.t_Valid_Predicted_Speed *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Valid_Predicted_Speed -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 			
 			
 		
-	Class tns.t_Invalid_Predicted_Speed{
-+ Predicted_Speed_Val : .
+	
+Class tns.t_Invalid_Predicted_Speed{
+#Predicted_Speed_Val:tns:Validity
 }
-tns.t_Invalid_Predicted_Speed .down.> .
+
+tns.t_Invalid_Predicted_Speed *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Invalid_Predicted_Speed -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 		
-	Class tns.t_Valid_Predicted_Wind{
-+ Predicted_Wind_Val : .
-+ Predicted_Wind_Speed : tns.Speed
-+ Predicted_Wind_Dir : tns.AngleBearing
+	
+Class tns.t_Valid_Predicted_Wind{
+#Predicted_Wind_Val:tns:Validity
++Predicted_Wind_Speed:tns:Speed
++Predicted_Wind_Dir:tns:AngleBearing
 }
-tns.t_Valid_Predicted_Wind .down.> .
+
 tns.t_Valid_Predicted_Wind .down.> tns.Speed
+
 tns.t_Valid_Predicted_Wind .down.> tns.AngleBearing
+
+tns.t_Valid_Predicted_Wind *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Valid_Predicted_Wind -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 			
@@ -186,25 +1579,31 @@ tns.t_Valid_Predicted_Wind -up-|> tns.Validity
 			
 			
 		
-	Class tns.t_Invalid_Predicted_Wind{
-+ Predicted_Wind_Val : .
+	
+Class tns.t_Invalid_Predicted_Wind{
+#Predicted_Wind_Val:tns:Validity
 }
-tns.t_Invalid_Predicted_Wind .down.> .
+
+tns.t_Invalid_Predicted_Wind *-down.> tns.Validity
+
 		
 			
 				
 					
-tns.t_Invalid_Predicted_Wind -up-|> tns.Validity
+
+						
+						
+					
 				
 			
 		
 	
 !enduml
-*!
-*!
-*!
+
 !*> Code sippets
 !listing cpp {
 cout << "hello world !";
 }
+*!
+*!
 *!
